@@ -4,10 +4,14 @@ import { Check, GameController } from "phosphor-react";
 import { ReactElement, ReactNode, useEffect, useRef, useState } from "react";
 import { IGameDTO } from "../../pages/Home/Home";
 
-import { FormControll } from "./FormControll";
-import { Input } from "./Input";
-import { InputSelect, InputSelectItem, IValuesDTO } from "./InputSelect";
-import { WeekButton } from "./WeekButton";
+import {
+  Input,
+  FormControll,
+  InputSelect,
+  InputSelectItem,
+  IValuesDTO,
+  WeekButton,
+} from "./";
 
 export interface InputProps {
   values: IValuesDTO[];
