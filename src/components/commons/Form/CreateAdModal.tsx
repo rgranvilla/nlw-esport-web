@@ -6,7 +6,7 @@ import { IGameDTO } from "../../pages/Home/Home";
 
 import { FormControll } from "./FormControll";
 import { Input } from "./Input";
-import { InputSelect, InputSelectItem, IValuesDTO } from "./InputSelectNew";
+import { InputSelect, InputSelectItem, IValuesDTO } from "./InputSelect";
 import { WeekButton } from "./WeekButton";
 
 export interface InputProps {

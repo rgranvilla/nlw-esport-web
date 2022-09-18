@@ -1,50 +1,96 @@
+import { forwardRef, ForwardRefRenderFunction } from "react";
 import * as Select from "@radix-ui/react-select";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  CheckIcon,
-} from "@radix-ui/react-icons";
-import { IValuesDTO } from "./CreateAdModal";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
-interface IInputSelectProps {
-  values: IValuesDTO[];
+import { ChevronDownIcon, CheckIcon } from "@radix-ui/react-icons";
+
+export interface IValuesDTO {
+  id: string;
+  title: string;
 }
 
-export function InputSelect({ values }: IInputSelectProps) {
+export interface IInputSelectProps extends HTMLButtonElement {}
+
+const Scrollbar = () => {
   return (
-    <div className="py-3 px-4 bg-zinc-900 rounded text-sm placeholder: text-zinc-500">
-      <Select.Root name="games">
-        <Select.Trigger className="flex w-full justify-between">
+    <ScrollArea.Scrollbar
+      orientation="vertical"
+      className={`
+    flex
+    select-none
+    touch-none
+    transition ease-in-out delay-100
+    bg-zinc-800
+    hover:bg-zinc-700 duration-300
+    rounded
+    w-3
+    `}
+    >
+      <ScrollArea.Thumb
+        className={`
+      flex-1 
+      bg-zinc-300
+      rounded-xl
+      relative
+      before:absolute
+      before:top-1/2  
+      before:left-1/2
+      before:-translate-x-1/2
+      before:-translate-y-1/2
+      before:w-full
+      before:h-full
+      `}
+      />
+    </ScrollArea.Scrollbar>
+  );
+};
+
+const InputSelectBase: ForwardRefRenderFunction<
+  IInputSelectProps,
+  Select.SelectProps
+> = ({ children, ...rest }: Select.SelectProps, forwardedRef) => {
+  return (
+    <div className="w-full h-full py-3 px-4 bg-zinc-900 rounded text-sm placeholder: text-zinc-500">
+      <Select.Root {...rest}>
+        <Select.Trigger
+          className="flex w-full justify-between"
+          ref={forwardedRef}
+        >
           <Select.Value placeholder="Selecione o game…" />
           <Select.Icon>
             <ChevronDownIcon />
           </Select.Icon>
         </Select.Trigger>
+
         <Select.Portal>
-          <Select.Content className="text-white bg-zinc-900 py-2 px-4 mt-11 rounded w-full h-32">
-            <Select.ScrollUpButton className="flex justify-end">
-              <ChevronUpIcon width={20} height={20} className="bg-zinc-800" />
-            </Select.ScrollUpButton>
-            <Select.Viewport>
-              {values.map(({ id, title }) => (
-                <Select.Item
-                  value={id}
-                  key={id}
-                  className="flex flex-row gap-2"
-                >
-                  <Select.ItemText>{title}</Select.ItemText>
-                  <Select.ItemIndicator>
-                    <CheckIcon />
-                  </Select.ItemIndicator>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-            <Select.ScrollDownButton className="flex justify-end w-full">
-              <ChevronDownIcon width={20} height={20} className="bg-zinc-800" />
-            </Select.ScrollDownButton>
+          <Select.Content className="text-white  bg-zinc-900 py-2 px-4 mt-11 rounded w-full h-32">
+            <ScrollArea.Root className="w-full h-52 rounded overflow-hidden">
+              <ScrollArea.Viewport className="w-full h-full rounded">
+                <Select.Viewport>{children}</Select.Viewport>
+              </ScrollArea.Viewport>
+              <Scrollbar />
+            </ScrollArea.Root>
           </Select.Content>
         </Select.Portal>
       </Select.Root>
     </div>
   );
-}
+};
+
+const InputSelectItemBase: ForwardRefRenderFunction<
+  HTMLDivElement,
+  Select.SelectItemProps
+> = ({ children, ...rest }: Select.SelectItemProps, forwardedRef) => {
+  return (
+    <Select.Item {...rest} ref={forwardedRef}>
+      <Select.ItemText>{children}</Select.ItemText>
+      <Select.ItemIndicator>
+        <CheckIcon />
+      </Select.ItemIndicator>
+    </Select.Item>
+  );
+};
+
+export const InputSelectItem = forwardRef(InputSelectItemBase);
+
+export const InputSelect = forwardRef(InputSelectBase);
